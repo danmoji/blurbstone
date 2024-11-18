@@ -1,0 +1,317 @@
+[
+  {
+    "id": 1,
+    "name": "Chillwind Yeti",
+    "mana_cost": 4,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "AAAARRRH",
+    "attack_sound": "AAAARRRH",
+    "death_sound": "AAAARRRH",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 4,
+    "health": 5,
+    "durability": 0,
+    "spell_type": 0
+  },
+  {
+    "id": 2,
+    "name": "Fire ball",
+    "mana_cost": 4,
+    "rarity": "free",
+    "description": "Deals 6 damage.",
+    "summon_sound": "AAAARRRH",
+    "attack_sound": "",
+    "death_sound": "",
+    "card_type": "spell",
+    "class": "mage",
+    "minion_type": "",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 0,
+    "health": 0,
+    "durability": 0,
+    "spell_type": "damage"
+  },
+  {
+    "id": 3,
+    "name": "Fiery waraxe",
+    "mana_cost": 2,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "ZINK!",
+    "attack_sound": "ZINK!",
+    "death_sound": "ZINK!",
+    "card_type": "weapon",
+    "class": "warrior",
+    "minion_type": "",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 0,
+    "health": 0,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 4,
+    "name": "Wisp",
+    "mana_cost": 0,
+    "rarity": "common",
+    "description": "",
+    "summon_sound": "ZINK!",
+    "attack_sound": "ZINK!",
+    "death_sound": "ZINK!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "undead",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 1,
+    "health": 1,
+    "durability": 0,
+    "spell_type": 0
+  },
+  {
+    "id": 5,
+    "name": "Shieldbearer",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "Taunt",
+    "summon_sound": "You shall not pass!",
+    "attack_sound": "You shall not pass!",
+    "death_sound": "You shall not pass!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 1,
+      "ability_description": "Taunt"
+    },
+    "attack": 0,
+    "health": 4,
+    "durability": 0,
+    "spell_type": 0
+  },
+  {
+    "id": 6,
+    "name": "Worgen Infiltrator",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "Stealth",
+    "summon_sound": "I smell blood!",
+    "attack_sound": "I smell blood!",
+    "death_sound": "I smell blood!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 2,
+      "ability_description": "Stealth"
+    },
+    "attack": 2,
+    "health": 1,
+    "durability": 0,
+    "spell_type": 0
+  },
+  {
+    "id": 7,
+    "name": "Stonetusk Boar",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "Charge",
+    "summon_sound": "Kroch Kroch Kroch!",
+    "attack_sound": "Kroch Kroch Kroch!",
+    "death_sound": "Kroch Kroch Kroch!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 3,
+      "ability_description": "Charge"
+    },
+    "attack": 1,
+    "health": 1,
+    "durability": 0,
+    "spell_type": 0
+  },
+  {
+    "id": 8,
+    "name": "Murloc Raider ",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "",
+    "summon_sound": "Blah Blurp Blop",
+    "attack_sound": "Blah Blurp Blop",
+    "death_sound": "Blah Blurp Blop",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": "   "
+    },
+    "attack": 2,
+    "health": 1,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 9,
+    "name": "Bloodfen Raptor",
+    "mana_cost": 2,
+    "rarity": "common",
+    "description": "",
+    "summon_sound": "RUAHHH!",
+    "attack_sound": "RUAHHH!",
+    "death_sound": "RUAHHH!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 1,
+    "health": 1,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 10,
+    "name": "River Crocolisk",
+    "mana_cost": 2,
+    "rarity": "common",
+    "description": "",
+    "summon_sound": "Blblllb",
+    "attack_sound": "Blblllb",
+    "death_sound": "Blblllb",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "beast",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 2,
+    "health": 3,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 11,
+    "name": "Magma RAger",
+    "mana_cost": 3,
+    "rarity": "free",
+    "description": "EARHHH!",
+    "summon_sound": "EARHHH!",
+    "attack_sound": "EARHHH!",
+    "death_sound": "",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "elemental",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 5,
+    "health": 1,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 12,
+    "name": "Oasis Snapjaw",
+    "mana_cost": 4,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "Pld",
+    "attack_sound": "pld",
+    "death_sound": "pld",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "beast",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 2,
+    "health": 7,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 13,
+    "name": "Boulderfist Ogre",
+    "mana_cost": 6,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "What you lookin' at?",
+    "attack_sound": "Me smash",
+    "death_sound": "UOHOOOUUUUUUU",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 6,
+    "health": 7,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 14,
+    "name": "Core Hound",
+    "mana_cost": 7,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "AAARH...",
+    "attack_sound": "AARHH...",
+    "death_sound": "AARHH...",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "beast",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 9,
+    "health": 5,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 15,
+    "name": "War Golem",
+    "mana_cost": 7,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "HHRR",
+    "attack_sound": "HHHRR",
+    "death_sound": "BUSHRRR",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "attack": 7,
+    "health": 7,
+    "durability": 0,
+    "spell_type": ""
+  }
+]

@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "name": "Chillwind Yeti",
+    "mana_cost": 4,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "AAAARRRH",
+    "attack_sound": "AAAARRRH",
+    "death_sound": "AAAARRRH",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "health": 5,
+    "attack": 4,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 2,
+    "name": "Fire ball",
+    "mana_cost": 4,
+    "rarity": "free",
+    "description": "Deals 6 damage.",
+    "summon_sound": "AAAARRRH",
+    "attack_sound": "",
+    "death_sound": "",
+    "card_type": "spell",
+    "class": "mage",
+    "minion_type": "",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "health": 0,
+    "attack": 0,
+    "durability": 0,
+    "spell_type": "damage"
+  },
+  {
+    "id": 3,
+    "name": "Fiery waraxe",
+    "mana_cost": 2,
+    "rarity": "free",
+    "description": "",
+    "summon_sound": "ZINK!",
+    "attack_sound": "ZINK!",
+    "death_sound": "ZINK!",
+    "card_type": "weapon",
+    "class": "warrior",
+    "minion_type": "",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "health": 0,
+    "attack": 0,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 4,
+    "name": "Wisp",
+    "mana_cost": 0,
+    "rarity": "common",
+    "description": "",
+    "summon_sound": "ZINK!",
+    "attack_sound": "ZINK!",
+    "death_sound": "ZINK!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "undead",
+    "minion_ability": {
+      "id": 0,
+      "ability_description": ""
+    },
+    "health": 1,
+    "attack": 1,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 5,
+    "name": "Shieldbearer",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "Taunt",
+    "summon_sound": "You shall not pass!",
+    "attack_sound": "You shall not pass!",
+    "death_sound": "You shall not pass!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 1,
+      "ability_description": "Taunt"
+    },
+    "health": 4,
+    "attack": 0,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 6,
+    "name": "Worgen Infiltrator",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "Stealth",
+    "summon_sound": "I smell blood!",
+    "attack_sound": "I smell blood!",
+    "death_sound": "I smell blood!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 2,
+      "ability_description": "Stealth"
+    },
+    "health": 1,
+    "attack": 2,
+    "durability": 0,
+    "spell_type": ""
+  },
+  {
+    "id": 7,
+    "name": "Stonetusk Boar",
+    "mana_cost": 1,
+    "rarity": "common",
+    "description": "Charge",
+    "summon_sound": "Kroch Kroch Kroch!",
+    "attack_sound": "Kroch Kroch Kroch!",
+    "death_sound": "Kroch Kroch Kroch!",
+    "card_type": "minion",
+    "class": "neutral",
+    "minion_type": "neutral",
+    "minion_ability": {
+      "id": 3,
+      "ability_description": "Charge"
+    },
+    "health": 1,
+    "attack": 1,
+    "durability": 0,
+    "spell_type": ""
+  }
+]

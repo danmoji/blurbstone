@@ -1,0 +1,11 @@
+{
+    "id": 1,
+    "class": "mage",
+    "deck_name": "Freeze mage",
+    "cards": {
+        "Stonetusk Boar": 1,
+        "Chillwind Yeti": 1,
+        "Argent Squire": 1,
+        "Worgen Infiltrator": 1
+    }
+}

@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "class": "mage",
+        "name": "Jaina Proudmoreee",
+        "hero-power": {
+            "id": 1,
+            "name": "Fireball",
+            "description": "Deals 1 damage."
+        },
+        "battle-cry": "You've asked for it",
+        "defeat": "AAAARRRH!!!!!!"
+    },
+    {
+        "id": 2,
+        "hero-power": {
+            "id": 2,
+            "name": "Reinforce",
+            "description": "Summon a 1/1 Silver Hand Recruit."
+        },
+        "class": "paladin",
+        "name": "Tirion Fordring",
+        "battle-cry": "For Honor",
+        "defeat": "Justice aaa..."
+    }
+]
