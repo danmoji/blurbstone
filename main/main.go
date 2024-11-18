@@ -54,41 +54,133 @@ func handleClient(conn net.Conn) {
 	mu.Unlock()
 
 	fmt.Printf("%s connected.\n", username)
-	broadcast(fmt.Sprintf("%s has joined!", username))
+	broadcastLobby(fmt.Sprintf("%s has joined!", username))
 
 	// Read messages from the client
 	scanner := bufio.NewScanner(conn)
 S:
 	for scanner.Scan() {
+		var input, command string
+		var parts, args []string
+
 		message := scanner.Text()
-		input := strings.TrimSpace(message)
-		parts := strings.Fields(input)
-		command := parts[0]
-		args := parts[1:]
+		input = strings.TrimSpace(message)
+		parts = strings.Fields(input)
+
+		if message != "" {
+			command = parts[0]
+			args = parts[1:]
+		}
 
 		switch command {
 		case "all-chat":
-			broadcast(fmt.Sprintf("[%s] %s: %s", time.Now().Format("15:04:05"), username, args))
+			if len(args) > 0 {
+				broadcastLobby(fmt.Sprintf("[%s] %s: %s", time.Now().Format("15:04:05"), username, args))
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: all-chat TEXT")
+			}
 		case "exit-server":
-			broadcast(fmt.Sprintf("Player %s has left.", username))
-			break S
+			if len(args) == 0 {
+				broadcastLobby(fmt.Sprintf("Player %s has left.", username))
+				break S
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: exit-server")
+			}
 		case "get-help":
-			lib.CmdGetHelp(&p)
+			if len(args) == 0 {
+				lib.CmdGetHelp(&p)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: get-help")
+			}
 		case "create-game":
-			lib.CmdCreateGame(&p, &games, &mu)
+			if len(args) == 0 {
+				lib.CmdCreateGame(&p, &games, &mu)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: create-game")
+			}
 		case "destroy-game":
-			lib.CmdDestroyGame(&p, &games, &mu)
+			if len(args) == 0 {
+				lib.CmdDestroyGame(&p, &games, &mu)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: destroy-game")
+			}
 		case "join-game":
 			if len(args) == 1 {
-				lib.CmdJoinGame(&p, &games, &mu, args[1])
+				lib.CmdJoinGame(&p, &games, &mu, args[0])
 			} else {
-				fmt.Fprintln(p.Conn, "Usage: join-game GAME_ID")
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: join-game GAME_ID")
 			}
 		case "forfeit-game":
-			lib.CmdForfeitGame(&p, &games, &clients, &mu)
+			if len(args) == 0 {
+				lib.CmdForfeitGame(&p, &games, &clients, &mu)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: forfeit-game")
+			}
+		case "peek-hand":
+			if len(args) == 0 {
+				lib.CmdPeekHand(&p, games[p.CurrGameId], &mu)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: peek-hand")
+			}
+		case "show-time":
+			if len(args) == 0 {
+				lib.CmdShowTimer(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "show-board":
+			if len(args) == 0 {
+				lib.CmdShowBoard(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "inspect-opponent":
+			if len(args) == 0 {
+				lib.CmdInspectOpponent(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "inspect-minion":
+			if len(args) == 1 {
+				lib.CmdInspectMinion(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "play-card":
+			if len(args) == 0 {
+				lib.CmdPlayCard(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "hero-power":
+			if len(args) == 0 {
+				lib.CmdHeroPower(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "minion-attack":
+			if len(args) == 0 {
+				lib.CmdMinionAttack(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
+		case "weapon-attack":
+			if len(args) == 0 {
+				lib.CmdWeaponAttack(&p, games[p.CurrGameId], &mu)
+			} else {
+
+			}
 		default:
 			fmt.Fprintln(p.Conn, "Unknown command.")
-			fmt.Println(p.Conn, "Write get-help")
+			fmt.Fprintln(p.Conn, "Write get-help")
 		}
 	}
 
@@ -99,10 +191,12 @@ S:
 	fmt.Printf("%s disconnected.\n", username)
 }
 
-func broadcast(message string) {
+func broadcastLobby(message string) {
 	mu.Lock()
 	defer mu.Unlock()
-	for conn := range clients {
-		_, _ = fmt.Fprintln(conn, message)
+	for conn, client := range clients {
+		if !client.InGame {
+			fmt.Fprintln(conn, message)
+		}
 	}
 }
