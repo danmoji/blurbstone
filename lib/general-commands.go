@@ -33,9 +33,9 @@ func CmdGetHelp(p *Player) {
 }
 
 func CmdCreateGame(p *Player, games *map[int]*Game, mu *sync.Mutex) {
-	if p.OcupiesGame {
-		fmt.Fprintln(p.Conn, "You already have created a game.")
-		fmt.Println(errors.New("creator has already created a game"))
+	if p.InGame {
+		fmt.Fprintln(p.Conn, "You are already in game.")
+		fmt.Println(errors.New("creator is already in game"))
 		return
 	}
 	g := &Game{
@@ -44,37 +44,45 @@ func CmdCreateGame(p *Player, games *map[int]*Game, mu *sync.Mutex) {
 	}
 
 	mu.Lock()
-	p.OcupiesGame = true
+	p.InGame = true
 	(*games)[g.Id] = g
 	mu.Unlock()
 
-	fmt.Fprintf(p.Conn, "game created with id %d", g.Id)
-	fmt.Println(p.Conn, "Join a created game with join command.")
+	fmt.Fprintf(p.Conn, "game created with id %d \n", g.Id)
+	fmt.Fprintln(p.Conn, "Joining game ...")
 
-	//TODO join game
-
+	CmdJoinGame(p, games, mu, fmt.Sprintf("%d", p.Id))
 }
 
 func CmdDestroyGame(p *Player, games *map[int]*Game, mu *sync.Mutex) {
-	if !p.OcupiesGame {
-		fmt.Fprintln(p.Conn, "No active game found to destroy.")
-		fmt.Fprintln(p.Conn, "You can create a game with the create-game command.")
-		fmt.Println(errors.New("Player doesn't have any games created"))
-		return
-	}
-
-	_, exists := (*games)[p.Id]
+	g, exists := (*games)[p.Id]
 	if !exists {
 		fmt.Fprintln(p.Conn, "No active game found to destroy.")
 		fmt.Println(errors.New("no active game found for the player"))
 		return
 	}
 
+	if !p.InGame {
+		fmt.Fprintln(p.Conn, "No active game found to destroy.")
+		fmt.Fprintln(p.Conn, "You can create a game with the create-game command.")
+		fmt.Println(errors.New("player doesn't have any games created"))
+		return
+	}
+
+	if g.Player2 != nil {
+		fmt.Fprintln(p.Conn, "You cannot destroy game with player 2 joined.")
+		fmt.Println(errors.New("player is trying to destroy game with player 2 joined"))
+		return
+	}
+
 	mu.Lock()
 	delete(*games, p.Id)
-	p.OcupiesGame = false
+	p.InGame = false
+	p.CurrGameId = 0
 	mu.Unlock()
-	fmt.Println(errors.New("Player does not have created any games"))
+
+	fmt.Fprintln(p.Conn, "Game", p.Id, "destroyed")
+	fmt.Println("Player", p.Id, "destroyed game.")
 }
 
 func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string) {
@@ -103,13 +111,22 @@ func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string)
 		game.Player1 = p
 		mu.Unlock()
 		fmt.Fprintln(p.Conn, "You have joined the game as Player 1.")
+		fmt.Fprintln(p.Conn, "Waiting for Player 2 to join a game.")
 		fmt.Printf("Player %d joined game %d as Player 1.\n", p.Id, gId)
+	} else if game.Player1 != nil && p.Id == game.Player1.Id {
+		fmt.Fprintln(p.Conn, "You are already in a game you have created.")
+		fmt.Println(errors.New("player 1 is trying to join to his own game again"))
+		return
 	} else if game.Player2 == nil {
 		mu.Lock()
 		game.Player2 = p
 		mu.Unlock()
 		fmt.Fprintln(p.Conn, "You have joined the game as Player 2.")
 		fmt.Printf("Player %d joined game %d as Player 2.\n", p.Id, gId)
+	} else {
+		fmt.Fprintln(p.Conn, "Error occured joining a game.")
+		fmt.Println(errors.New("error joining a game"))
+		return
 	}
 
 	mu.Lock()
@@ -118,12 +135,12 @@ func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string)
 	mu.Unlock()
 
 	if game.Player1 != nil && game.Player2 != nil {
-		fmt.Fprintln(game.Player1.Conn, "Player 2 has joined. The game can now start.")
+		fmt.Fprintln(game.Player1.Conn, "Player 2 has joined and is ready. The game starts.")
 		fmt.Fprintln(game.Player2.Conn, "Player 1 is ready. The game starts.")
 		fmt.Println("Game", gId, "is ready to start.")
-	}
 
-	// TODO start the game
+		// TODO start the game if both players are in game
+	}
 }
 
 func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Player, mu *sync.Mutex) {
@@ -166,8 +183,6 @@ func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Play
 	p2.CurrGameId = 0
 	p1.Hand = nil
 	p2.Hand = nil
-	p1.OcupiesGame = false
-	p2.OcupiesGame = false
 	p1.IsStarting = false
 	p2.IsStarting = false
 	p1.IsTurn = false

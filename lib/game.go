@@ -20,17 +20,16 @@ type Game struct {
 }
 
 type Player struct {
-	Id          int
-	Conn        net.Conn
-	Username    string
-	DeckID      int
-	OcupiesGame bool
-	CurrGameId  int
-	InGame      bool
-	IsStarting  bool
-	Hand        []Card
-	Deck        Deck
-	IsTurn      bool
+	Id         int
+	Conn       net.Conn
+	Username   string
+	DeckID     int
+	CurrGameId int
+	InGame     bool
+	IsStarting bool
+	Hand       []Card
+	Deck       Deck
+	IsTurn     bool
 }
 
 type BoardMinion struct {

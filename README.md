@@ -77,3 +77,5 @@ minon-attack "number of minon" -> then it requests target number (opponent hero 
 play-card "number of card" -> then it plays a card or requests a targe number
 hero-power -> "or requersts target number if its like a mage or priest"
 weapon-attack "target number"
+
+## how to implement multiple stage commands like battlecry deals 1 damage or heal 2

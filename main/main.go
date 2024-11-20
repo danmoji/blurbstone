@@ -150,7 +150,7 @@ S:
 			}
 		case "inspect-minion":
 			if len(args) == 1 {
-				lib.CmdInspectMinion(&p, games[p.CurrGameId], &mu)
+				lib.CmdInspectMinion(&p, games[p.CurrGameId], &mu, args[0])
 			} else {
 
 			}
