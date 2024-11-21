@@ -52,6 +52,8 @@ func CmdCreateGame(p *Player, games *map[int]*Game, mu *sync.Mutex) {
 	fmt.Fprintln(p.Conn, "Joining game ...")
 
 	CmdJoinGame(p, games, mu, fmt.Sprintf("%d", p.Id))
+
+	// TODO test if player can create or join game if he did not create a game but joined as 2nd player
 }
 
 func CmdDestroyGame(p *Player, games *map[int]*Game, mu *sync.Mutex) {
@@ -69,7 +71,7 @@ func CmdDestroyGame(p *Player, games *map[int]*Game, mu *sync.Mutex) {
 		return
 	}
 
-	if g.Player2 != nil {
+	if g.P2 != nil {
 		fmt.Fprintln(p.Conn, "You cannot destroy game with player 2 joined.")
 		fmt.Println(errors.New("player is trying to destroy game with player 2 joined"))
 		return
@@ -100,26 +102,26 @@ func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string)
 		return
 	}
 
-	if game.Player1 != nil && game.Player2 != nil {
+	if game.P1 != nil && game.P2 != nil {
 		fmt.Fprintln(p.Conn, "The game is already full.")
 		fmt.Println("Game with ID", gId, "is full.")
 		return
 	}
 
-	if game.Player1 == nil {
+	if game.P1 == nil {
 		mu.Lock()
-		game.Player1 = p
+		game.P1 = p
 		mu.Unlock()
 		fmt.Fprintln(p.Conn, "You have joined the game as Player 1.")
 		fmt.Fprintln(p.Conn, "Waiting for Player 2 to join a game.")
 		fmt.Printf("Player %d joined game %d as Player 1.\n", p.Id, gId)
-	} else if game.Player1 != nil && p.Id == game.Player1.Id {
+	} else if game.P1 != nil && p.Id == game.P1.Id {
 		fmt.Fprintln(p.Conn, "You are already in a game you have created.")
 		fmt.Println(errors.New("player 1 is trying to join to his own game again"))
 		return
-	} else if game.Player2 == nil {
+	} else if game.P2 == nil {
 		mu.Lock()
-		game.Player2 = p
+		game.P2 = p
 		mu.Unlock()
 		fmt.Fprintln(p.Conn, "You have joined the game as Player 2.")
 		fmt.Printf("Player %d joined game %d as Player 2.\n", p.Id, gId)
@@ -134,9 +136,9 @@ func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string)
 	p.CurrGameId = game.Id
 	mu.Unlock()
 
-	if game.Player1 != nil && game.Player2 != nil {
-		fmt.Fprintln(game.Player1.Conn, "Player 2 has joined and is ready. The game starts.")
-		fmt.Fprintln(game.Player2.Conn, "Player 1 is ready. The game starts.")
+	if game.P1 != nil && game.P2 != nil {
+		fmt.Fprintln(game.P2.Conn, "Player 2 has joined and is ready. The game starts.")
+		fmt.Fprintln(game.P2.Conn, "Player 1 is ready. The game starts.")
 		fmt.Println("Game", gId, "is ready to start.")
 
 		// TODO start the game if both players are in game
@@ -144,8 +146,8 @@ func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string)
 }
 
 func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Player, mu *sync.Mutex) {
-	p1 := (*games)[p.CurrGameId].Player1
-	p2 := (*games)[p.CurrGameId].Player2
+	p1 := (*games)[p.CurrGameId].P2
+	p2 := (*games)[p.CurrGameId].P2
 
 	if !p.InGame {
 		fmt.Fprintln(p.Conn, "You are not in a game")
@@ -162,15 +164,15 @@ func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Play
 	if p.Id == p1.Id {
 		fmt.Fprintln(p.Conn, "You have conceded the game.")
 		fmt.Fprintln(p.Conn, "Returning to lobby ...")
-		fmt.Fprintln((*games)[p.CurrGameId].Player2.Conn, "Player 1 conceded this game.")
-		fmt.Fprintln((*games)[p.CurrGameId].Player2.Conn, "You win.")
-		fmt.Fprintln((*games)[p.CurrGameId].Player2.Conn, "Returning to lobby ...")
+		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Player 1 conceded this game.")
+		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "You win.")
+		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Returning to lobby ...")
 	} else if p.Id == p2.Id {
 		fmt.Fprintln(p.Conn, "You have conceded the game.")
 		fmt.Fprintln(p.Conn, "Returning to lobby ...")
-		fmt.Fprintln((*games)[p.CurrGameId].Player2.Conn, "Player 2 conceded this game.")
-		fmt.Fprintln((*games)[p.CurrGameId].Player2.Conn, "You win.")
-		fmt.Fprintln((*games)[p.CurrGameId].Player2.Conn, "Returning to lobby ...")
+		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Player 2 conceded this game.")
+		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "You win.")
+		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Returning to lobby ...")
 	} else {
 		fmt.Println(errors.New("invalid player id found"))
 		fmt.Fprintln(p.Conn, "error, found invalid player key")
@@ -181,8 +183,8 @@ func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Play
 	p2.InGame = false
 	p1.CurrGameId = 0
 	p2.CurrGameId = 0
-	p1.Hand = nil
-	p2.Hand = nil
+	p1.Hero.Hand = nil
+	p2.Hero.Hand = nil
 	p1.IsStarting = false
 	p2.IsStarting = false
 	p1.IsTurn = false

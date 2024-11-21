@@ -13,14 +13,98 @@
     },
     {
         "id": 2,
+        "class": "paladin",
+        "name": "Tirion Fordring",
         "hero-power": {
             "id": 2,
             "name": "Reinforce",
             "description": "Summon a 1/1 Silver Hand Recruit."
         },
-        "class": "paladin",
-        "name": "Tirion Fordring",
         "battle-cry": "For Honor",
         "defeat": "Justice aaa..."
+    },
+    {
+        "id": 3,
+        "class": "druid",
+        "name": "Malfurion Stormrage",
+        "hero-power": {
+            "id": 3,
+            "name": "Shape Shift",
+            "description": "Gain 1 Armor and 1 Attack this turn."
+        },
+        "battle-cry": "Nature will rise against you!",
+        "defeat": "My work is not finished..."
+    },
+    {
+        "id": 4,
+        "class": "warrior",
+        "name": "Garrosh Hellscream",
+        "hero-power": {
+            "id": 4,
+            "name": "Armor Up!",
+            "description": "Gain 2 Armor."
+        },
+        "battle-cry": "Victory or death!",
+        "defeat": "I was not strong enough..."
+    },
+    {
+        "id": 5,
+        "class": "rogue",
+        "name": "Valeera Sanguinar",
+        "hero-power": {
+            "id": 5,
+            "name": "Dagger Mastery",
+            "description": "Equip a 1/2 Dagger."
+        },
+        "battle-cry": "Watch your back.",
+        "defeat": "This is not over..."
+    },
+    {
+        "id": 6,
+        "class": "shaman",
+        "name": "Thrall",
+        "hero-power": {
+            "id": 6,
+            "name": "Totemic Call",
+            "description": "Summon a random Totem."
+        },
+        "battle-cry": "The elements will destroy you.",
+        "defeat": "The elements have forsaken me..."
+    },
+    {
+        "id": 7,
+        "class": "priest",
+        "name": "Anduin Wrynn",
+        "hero-power": {
+            "id": 7,
+            "name": "Lesser Heal",
+            "description": "Restore 2 Health."
+        },
+        "battle-cry": "The light shall burn you!",
+        "defeat": "My vision fades..."
+    },
+    {
+        "id": 8,
+        "class": "warlock",
+        "name": "Gul'dan",
+        "hero-power": {
+            "id": 8,
+            "name": "Life Tap",
+            "description": "Draw a card and take 2 damage."
+        },
+        "battle-cry": "Your soul shall be mine!",
+        "defeat": "Nooo, my destiny!"
+    },
+    {
+        "id": 9,
+        "class": "hunter",
+        "name": "Rexxar",
+        "hero-power": {
+            "id": 9,
+            "name": "Steady Shot",
+            "description": "Deal 2 damage to the enemy hero."
+        },
+        "battle-cry": "Let the hunt begin!",
+        "defeat": "I will return..."
     }
 ]

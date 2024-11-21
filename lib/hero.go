@@ -51,15 +51,43 @@ func LoadAllCards(path string) []Card {
 }
 
 type Hero struct {
-	Id           int       `json:"id"`
-	Class        string    `json:"class"`
-	Name         string    `json:"name"`
-	HeroPower    HeroPower `json:"hero_power"`
-	SummonSound  string    `json:"summon_sound"`
-	AttackSound  string    `json:"attack_sound"`
-	DefeatSound  string    `json:"defeat_sound"`
-	Health       int
-	ManaCrystals int
+	Id              int `json:"id"`
+	DeckId          int
+	Class           string    `json:"class"`
+	Name            string    `json:"name"`
+	HeroPower       HeroPower `json:"hero_power"`
+	SummonSound     string    `json:"summon_sound"`
+	AttackSound     string    `json:"attack_sound"`
+	DefeatSound     string    `json:"defeat_sound"`
+	Health          int
+	MaxHealth       int
+	ManaCrystals    int
+	MaxManaCrystals int
+	Hand            []Card
+	Deck            []Card
+	Armor           int
+	Attack          int
+	EquipedWeapon   Weapon
+	AttackCharges   int
+	Secrets         []Secret
+}
+
+type Secret struct {
+	Id          int
+	Name        string
+	ManaCost    int
+	Class       string
+	Description string
+}
+
+type Weapon struct {
+	Id          int
+	Name        string
+	ManaCost    int
+	Durability  int
+	Attack      int
+	Description string
+	Class       string
 }
 
 type Card struct {
@@ -90,11 +118,6 @@ type HeroPower struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
-}
-
-type Deck struct {
-	Hero  Hero
-	Cards []Card
 }
 
 // +------------------------------+

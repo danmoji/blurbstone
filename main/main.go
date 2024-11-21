@@ -69,6 +69,7 @@ S:
 
 		if message != "" {
 			command = parts[0]
+			// TODO test if this is ok if parts is empty
 			args = parts[1:]
 		}
 
@@ -134,47 +135,53 @@ S:
 			if len(args) == 0 {
 				lib.CmdShowTimer(&p, games[p.CurrGameId], &mu)
 			} else {
-
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: show-time")
 			}
 		case "show-board":
 			if len(args) == 0 {
 				lib.CmdShowBoard(&p, games[p.CurrGameId], &mu)
 			} else {
-
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: show-board")
 			}
-		case "inspect-opponent":
-			if len(args) == 0 {
-				lib.CmdInspectOpponent(&p, games[p.CurrGameId], &mu)
-			} else {
-
-			}
-		case "inspect-minion":
+		case "inspect-target":
 			if len(args) == 1 {
-				lib.CmdInspectMinion(&p, games[p.CurrGameId], &mu, args[0])
+				lib.CmdInspectTarget(&p, games[p.CurrGameId], &mu)
 			} else {
-
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: inspect-target TARGET_NUMBER")
+			}
+		case "hero-power":
+			if len(args) == 0 || len(args) == 1 {
+				var tgt string
+				if len(args) == 1 {
+					tgt = args[0]
+				} else {
+					tgt = ""
+				}
+				lib.CmdHeroPower(&p, games[p.CurrGameId], &mu, tgt)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: hero-power or 'hero-power TARGET_NUMBER'")
+			}
+		case "weapon-attack":
+			if len(args) == 1 {
+				lib.CmdWeaponAttack(&p, games[p.CurrGameId], &mu)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: weapon-attack or 'weapon-attack TARGET_NUMBER'")
+			}
+		case "minion-attack":
+			if len(args) == 1 {
+				lib.CmdMinionAttack(&p, games[p.CurrGameId], &mu)
+			} else {
+				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
+				fmt.Fprintln(p.Conn, "Command usage: minion-attack or 'minion-attack TARGET_NUMBER'")
 			}
 		case "play-card":
 			if len(args) == 0 {
 				lib.CmdPlayCard(&p, games[p.CurrGameId], &mu)
-			} else {
-
-			}
-		case "hero-power":
-			if len(args) == 0 {
-				lib.CmdHeroPower(&p, games[p.CurrGameId], &mu)
-			} else {
-
-			}
-		case "minion-attack":
-			if len(args) == 0 {
-				lib.CmdMinionAttack(&p, games[p.CurrGameId], &mu)
-			} else {
-
-			}
-		case "weapon-attack":
-			if len(args) == 0 {
-				lib.CmdWeaponAttack(&p, games[p.CurrGameId], &mu)
 			} else {
 
 			}
