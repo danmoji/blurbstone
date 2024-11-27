@@ -126,7 +126,7 @@ func Reinforce(p *Player, g *Game, mu *sync.Mutex) {
 		MaxHp:       1,
 		Attack:      1,
 		Description: "",
-		Statuses:    []string{},
+		Statuses:    Statuses{},
 	}
 
 	p.Board = append(p.Board, silverhandRecruit)
@@ -182,7 +182,7 @@ func TotemicCall(p *Player, g *Game, mu *sync.Mutex) {
 			MaxHp:       2,
 			Attack:      0,
 			Description: "At the end of your turn restore 1 Health to all friendly minions.",
-			Statuses:    []string{"Healing Aura"},
+			Statuses:    Statuses{Special: 1},
 		},
 		{
 			BoardId:  0,
@@ -191,7 +191,7 @@ func TotemicCall(p *Player, g *Game, mu *sync.Mutex) {
 			Hp:       1,
 			MaxHp:    1,
 			Attack:   1,
-			Statuses: []string{},
+			Statuses: Statuses{},
 		},
 		{
 			BoardId:     0,
@@ -201,7 +201,7 @@ func TotemicCall(p *Player, g *Game, mu *sync.Mutex) {
 			MaxHp:       2,
 			Attack:      0,
 			Description: "Taunt",
-			Statuses:    []string{"Taunt"},
+			Statuses:    Statuses{Taunt: true},
 		},
 		{
 			BoardId:     0,
@@ -211,7 +211,7 @@ func TotemicCall(p *Player, g *Game, mu *sync.Mutex) {
 			MaxHp:       2,
 			Attack:      0,
 			Description: "Spell Damage +1",
-			Statuses:    []string{"Spell Damage +1"},
+			Statuses:    Statuses{SpellDamage: 1},
 		},
 	}
 

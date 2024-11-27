@@ -32,6 +32,22 @@ type Player struct {
 	Board      []BoardMinion
 }
 
+type Statuses struct {
+	Taunt        bool
+	DivineShield bool
+	Silence      bool
+	Charge       bool
+	WindFury     bool
+	Frozen       bool
+	Stealth      bool
+	SpellDamage  int
+	Overload     int
+	Enrage       int
+	Battlecry    int
+	Deathrattle  int
+	Special      int
+}
+
 type BoardMinion struct {
 	BoardId     int
 	Name        string
@@ -39,8 +55,11 @@ type BoardMinion struct {
 	Hp          int
 	MaxHp       int
 	Attack      int
+	SummonSound string
+	AttackSound string
+	DeathSound  string
 	Description string
-	Statuses    []string
+	Statuses    Statuses
 }
 
 func (h Hero) DrawCard(p *Player, mu *sync.Mutex) {
@@ -208,7 +227,10 @@ func RemoveMinion(minions []BoardMinion, i int) []BoardMinion {
 func (g *Game) StartTurn() {
 	// this function is initiated after toss of coin and after milling
 	// write down current time
+
 }
+
+// TODO end turn command
 
 func startRecurrentTimer() {
 	interval := 1*time.Minute + 30*time.Second

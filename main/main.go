@@ -173,17 +173,17 @@ S:
 				fmt.Fprintln(p.Conn, "Command usage: weapon-attack or 'weapon-attack TARGET_NUMBER'")
 			}
 		case "minion-attack":
-			if len(args) == 1 {
-				lib.CmdMinionAttack(&p, games[p.CurrGameId], &mu)
+			if len(args) == 2 {
+				lib.CmdMinionAttack(&p, games[p.CurrGameId], &mu, args)
 			} else {
 				fmt.Fprintln(p.Conn, "Invalid number of arguments.")
-				fmt.Fprintln(p.Conn, "Command usage: minion-attack or 'minion-attack TARGET_NUMBER'")
+				fmt.Fprintln(p.Conn, "Command usage: minion-attack or 'minion-attack MINION_NUMBER TARGET_NUMBER'")
 			}
 		case "play-card":
 			if len(args) == 0 {
 				lib.CmdPlayCard(&p, games[p.CurrGameId], &mu)
 			} else {
-
+				// TODO probably you want atleast 1 argument, sometimes 2 depending on a card played
 			}
 		default:
 			fmt.Fprintln(p.Conn, "Unknown command.")

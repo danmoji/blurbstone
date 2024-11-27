@@ -2,6 +2,7 @@ package lib
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 )
 
@@ -106,11 +107,21 @@ func CmdWeaponAttack(p *Player, g *Game, mu *sync.Mutex) {
 	}
 
 	// TODO error if you dont select target
+
 	// TODO error if you select invalid target
+
 	fmt.Println("Attacking with weapon")
 }
 
-func CmdMinionAttack(p *Player, g *Game, mu *sync.Mutex) {
+func CmdMinionAttack(p *Player, g *Game, mu *sync.Mutex, args []string) {
+	var opponent *Player
+
+	if g.P1.Id == p.Id {
+		opponent = g.P2
+	} else {
+		opponent = g.P1
+	}
+
 	if !p.InGame {
 		fmt.Fprintln(p.Conn, "You must be in game in order to use this command.")
 		return
@@ -120,6 +131,49 @@ func CmdMinionAttack(p *Player, g *Game, mu *sync.Mutex) {
 		fmt.Fprintln(p.Conn, "Not your turn!")
 		return
 	}
+
+	minion_marking := args[0]
+	target_marking := args[1]
+
+	minion_number, err := strconv.Atoi(minion_marking)
+	if err != nil {
+		fmt.Fprintln(p.Conn, "Invalid argument minion_number.", "Given:", args[0], "Expected number 11-17")
+		fmt.Printf("Could not convert minion_number: %s to index", args[0])
+		return
+	}
+
+	target_number, err := strconv.Atoi(target_marking)
+	if err != nil {
+		fmt.Fprintln(p.Conn, "Invalid argument minion_number.", "Given:", args[1], "Expected number 21-27")
+		fmt.Printf("Could not convert targe_number: %s to index", args[1])
+		return
+	}
+
+	if minion_number < 0 || minion_number >= len(p.Board) {
+		fmt.Fprintf(p.Conn, "Minion does not exist on the board.")
+		fmt.Printf("Minion %d does not exist on the board.", minion_number)
+		return
+	}
+
+	if target_number < 0 || target_number >= len(opponent.Board) {
+		fmt.Fprintf(p.Conn, "Opponents minion does not exist on the board.")
+		fmt.Printf("Minion %d does not exist on the board.", target_number)
+		return
+	}
+
+	// TODO validate args if args object is looking good
+
+	// length must be 2 ?
+	// need to be in format of 2 digit number
+	// accepted values for minion number - 11 12 13 14 15 16 17
+	// accepted values for target - 2 21 22 23 24 25 26 27
+	// TODO make board of map that has indexes already predefined ?
+
+	// TODO check targeting options ... if not attacking wrong target with wrong minion
+
+	// TODO check statuses of the board
+
+	// TODO attack accordingly with damage minon / hero functions
 
 	fmt.Println("Attacking minion")
 }
