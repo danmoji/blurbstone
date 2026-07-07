@@ -58,11 +58,11 @@ func Fireblast(p *Player, g *Game, mu *sync.Mutex, tgt string) {
 	}
 
 	if tgt == "0" {
-		DamageHero(you, 1, mu)
+		DamageHero(you, 1)
 	} else if tgt == "1" {
-		DamageHero(opponent, 1, mu)
+		DamageHero(opponent, 1)
 	} else {
-		DamageMinion(you, opponent, mu, tgt, 1)
+		DamageMinion(you, opponent, tgt, 1)
 	}
 
 	// TODO check enemy hero hp if is 0 end the game
@@ -87,11 +87,11 @@ func LesserHeal(p *Player, g *Game, mu *sync.Mutex, tgt string) {
 	}
 
 	if tgt == "0" {
-		DamageHero(you, 1, mu)
+		HealHero(you, 2)
 	} else if tgt == "1" {
-		DamageHero(opponent, 1, mu)
+		HealHero(opponent, 2)
 	} else {
-		DamageMinion(you, opponent, mu, tgt, 1)
+		HealMinion(you, opponent, tgt, 2)
 	}
 }
 
@@ -99,11 +99,10 @@ func LifeTap(p *Player, g *Game, mu *sync.Mutex) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	h := p.Hero
 	fmt.Println("Life Tap")
-	h.ManaCrystals -= 2
-	DamageHero(p, 2, mu)
-	h.DrawCard(p, mu)
+	p.Hero.ManaCrystals -= 2
+	DamageHero(p, 2)
+	p.Hero.DrawCard(p)
 }
 
 func Reinforce(p *Player, g *Game, mu *sync.Mutex) {
@@ -159,7 +158,7 @@ func SteadyShot(p *Player, g *Game, mu *sync.Mutex) {
 		opponent = g.P1
 	}
 
-	DamageHero(opponent, 2, mu)
+	DamageHero(opponent, 2)
 
 	// TODO check enemy hero hp if is 0 end the game
 }

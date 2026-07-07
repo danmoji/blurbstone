@@ -23,6 +23,7 @@ Battlecry: Deal 3 damage to the enemy hero.
 Battlecry: Deal 2 damage.
 Your other minions have +1/+1
 */
+
 func Tunt() {
 	// id 1
 }

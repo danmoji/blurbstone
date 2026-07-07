@@ -146,9 +146,6 @@ func CmdJoinGame(p *Player, games *map[int]*Game, mu *sync.Mutex, gameId string)
 }
 
 func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Player, mu *sync.Mutex) {
-	p1 := (*games)[p.CurrGameId].P2
-	p2 := (*games)[p.CurrGameId].P2
-
 	if !p.InGame {
 		fmt.Fprintln(p.Conn, "You are not in a game")
 		fmt.Println(errors.New("player is not currently in a game"))
@@ -161,18 +158,34 @@ func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Play
 		return
 	}
 
+	g, exists := (*games)[p.CurrGameId]
+	if !exists {
+		fmt.Fprintln(p.Conn, "Cannot find your game.")
+		fmt.Println(errors.New("players game does not exist"))
+		return
+	}
+
+	p1 := g.P1
+	p2 := g.P2
+
+	if p2 == nil {
+		fmt.Fprintln(p.Conn, "There is no opponent to forfeit to. Use destroy-game instead.")
+		fmt.Println(errors.New("player is trying to forfeit game without player 2"))
+		return
+	}
+
 	if p.Id == p1.Id {
 		fmt.Fprintln(p.Conn, "You have conceded the game.")
 		fmt.Fprintln(p.Conn, "Returning to lobby ...")
-		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Player 1 conceded this game.")
-		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "You win.")
-		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Returning to lobby ...")
+		fmt.Fprintln(p2.Conn, "Player 1 conceded this game.")
+		fmt.Fprintln(p2.Conn, "You win.")
+		fmt.Fprintln(p2.Conn, "Returning to lobby ...")
 	} else if p.Id == p2.Id {
 		fmt.Fprintln(p.Conn, "You have conceded the game.")
 		fmt.Fprintln(p.Conn, "Returning to lobby ...")
-		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Player 2 conceded this game.")
-		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "You win.")
-		fmt.Fprintln((*games)[p.CurrGameId].P2.Conn, "Returning to lobby ...")
+		fmt.Fprintln(p1.Conn, "Player 2 conceded this game.")
+		fmt.Fprintln(p1.Conn, "You win.")
+		fmt.Fprintln(p1.Conn, "Returning to lobby ...")
 	} else {
 		fmt.Println(errors.New("invalid player id found"))
 		fmt.Fprintln(p.Conn, "error, found invalid player key")
@@ -188,8 +201,8 @@ func CmdForfeitGame(p *Player, games *map[int]*Game, players *map[net.Conn]*Play
 	p1.IsStarting = false
 	p2.IsStarting = false
 	p1.IsTurn = false
-	p1.IsTurn = false
-	delete(*games, p.CurrGameId)
+	p2.IsTurn = false
+	delete(*games, g.Id)
 	mu.Unlock()
 }
 

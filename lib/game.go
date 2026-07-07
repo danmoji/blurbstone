@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net"
 	"strconv"
-	"sync"
 	"time"
 )
 
@@ -62,13 +61,11 @@ type BoardMinion struct {
 	Statuses    Statuses
 }
 
-func (h Hero) DrawCard(p *Player, mu *sync.Mutex) {
-	mu.Lock()
-	defer mu.Unlock()
-
+// DrawCard mutates hero state; the caller must hold the game mutex.
+func (h *Hero) DrawCard(p *Player) {
 	if len(h.Deck) == 0 {
 		fmt.Printf("Player %s has no more cards in their deck.\n", p.Username)
-		DamageHero(p, 2, mu)
+		DamageHero(p, 2)
 		return
 	}
 
@@ -80,11 +77,9 @@ func (h Hero) DrawCard(p *Player, mu *sync.Mutex) {
 	fmt.Printf("Player %s drew card: %s", p.Username, card.Name)
 }
 
-func HealHero(p *Player, healAmount int, mu *sync.Mutex) {
-	mu.Lock()
-	defer mu.Unlock()
-
-	h := p.Hero
+// HealHero mutates hero state; the caller must hold the game mutex.
+func HealHero(p *Player, healAmount int) {
+	h := &p.Hero
 	if h.Health == h.MaxHealth {
 		fmt.Printf("%s is already at full health.\n", h.Name)
 		return
@@ -99,11 +94,9 @@ func HealHero(p *Player, healAmount int, mu *sync.Mutex) {
 	fmt.Printf("%s heals for %d. Health: %d -> %d\n", h.Name, healAmount, originalHealth, h.Health)
 }
 
-func DamageHero(p *Player, damage int, mu *sync.Mutex) {
-	mu.Lock()
-	defer mu.Unlock()
-
-	h := p.Hero
+// DamageHero mutates hero state; the caller must hold the game mutex.
+func DamageHero(p *Player, damage int) {
+	h := &p.Hero
 	if damage >= h.Health+h.Armor {
 		h.Health = 0
 		h.Armor = 0
@@ -126,10 +119,8 @@ func DamageHero(p *Player, damage int, mu *sync.Mutex) {
 	fmt.Printf("%s takes damage. Remaining Health: %d, Armor: %d\n", h.Name, h.Health, h.Armor)
 }
 
-func DamageMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, damage int) {
-	mu.Lock()
-	defer mu.Unlock()
-
+// DamageMinion mutates board state; the caller must hold the game mutex.
+func DamageMinion(you *Player, opponent *Player, tgt string, damage int) {
 	// First character: '0' for your minions, '1' for opponent's minions
 	targetType := tgt[0]
 	minionIndexStr := tgt[1:]
@@ -140,8 +131,8 @@ func DamageMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, dam
 	}
 
 	if targetType == '0' {
-		if i < len(you.Board) && i > 0 {
-			minion := you.Board[i]
+		if i < len(you.Board) && i >= 0 {
+			minion := &you.Board[i]
 			minion.Hp -= damage
 			if minion.Hp <= 0 {
 				fmt.Printf("Your minion %s dies!\n", minion.Name)
@@ -153,8 +144,8 @@ func DamageMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, dam
 			return
 		}
 	} else if targetType == '1' {
-		if i < len(opponent.Board) && i > 0 {
-			minion := opponent.Board[i]
+		if i < len(opponent.Board) && i >= 0 {
+			minion := &opponent.Board[i]
 			minion.Hp -= damage
 			if minion.Hp <= 0 {
 				fmt.Printf("Opponent's minion %d dies!\n", minion.Id)
@@ -172,10 +163,8 @@ func DamageMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, dam
 	}
 }
 
-func HealMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, healAmount int) {
-	mu.Lock()
-	defer mu.Unlock()
-
+// HealMinion mutates board state; the caller must hold the game mutex.
+func HealMinion(you *Player, opponent *Player, tgt string, healAmount int) {
 	// First character: '0' for your minions, '1' for opponent's minions
 	targetType := tgt[0]
 	minionIndexStr := tgt[1:]
@@ -186,8 +175,8 @@ func HealMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, healA
 	}
 
 	if targetType == '0' {
-		if i < len(you.Board) && i > 0 {
-			minion := you.Board[i]
+		if i < len(you.Board) && i >= 0 {
+			minion := &you.Board[i]
 			originalHealth := minion.Hp
 			minion.Hp += healAmount
 			if minion.Hp > minion.MaxHp {
@@ -200,8 +189,8 @@ func HealMinion(you *Player, opponent *Player, mu *sync.Mutex, tgt string, healA
 			return
 		}
 	} else if targetType == '1' {
-		if i < len(opponent.Board) && i > 0 {
-			minion := opponent.Board[i]
+		if i < len(opponent.Board) && i >= 0 {
+			minion := &opponent.Board[i]
 			originalHealth := minion.Hp
 			minion.Hp += healAmount
 			if minion.Hp > minion.MaxHp {
@@ -227,33 +216,60 @@ func RemoveMinion(minions []BoardMinion, i int) []BoardMinion {
 func (g *Game) StartTurn() {
 	// this function is initiated after toss of coin and after milling
 	// write down current time
-
 }
 
 // TODO end turn command
 
-func startRecurrentTimer() {
+func startGame(g *Game, games map[int]*Game) {
+	//
+	g.StartingPlayer = throwCoin(g)
+	g.TurnNo = 1
 	interval := 1*time.Minute + 30*time.Second
+	timer := time.NewTimer(interval)
 
-	fmt.Println("Recurrent timer started for", interval)
-
-	for {
-		timer := time.NewTimer(interval)
-
-		go func() {
-			time.Sleep(interval - 10*time.Second)
-			for i := 10; i > 0; i-- {
-				fmt.Println(i)
-				time.Sleep(1 * time.Second)
-			}
-		}()
-
-		// Wait for the timer to expire
+	go func() {
 		<-timer.C
+		fmt.Println("Timer fired")
+		//
+		nextTurn(g)
+	}()
 
-		fmt.Println("Time is up!")
-	}
 }
+
+func nextTurn(g *Game) {
+	// TODO switch CurrentTurnPlayerID, increment TurnNo, reset turn timer
+}
+
+func throwCoin(g *Game) int {
+	return 1
+}
+
+func endGame(g *Game, games map[int]*Game) {
+
+}
+
+// func startRecurrentTimer() {
+// interval := 1*time.Minute + 30 * time.Second
+
+// fmt.Println("Recurrent timer started for", interval)
+
+// for {
+// 	timer := time.NewTimer(interval)
+
+// 	go func() {
+// 		time.Sleep(interval - 10*time.Second)
+// 		for i := 10; i > 0; i-- {
+// 			fmt.Println(i)
+// 			time.Sleep(1 * time.Second)
+// 		}
+// 	}()
+
+// 	// Wait for the timer to expire
+// 	<-timer.C
+
+// 	fmt.Println("Time is up!")
+// }
+// }
 
 // func (g *Game) StartTurn() {
 

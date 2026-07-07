@@ -18,7 +18,7 @@ func TestLoadHeros(t *testing.T) {
 				Description: "Deals 1 damage.",
 			},
 			SummonSound: "You've asked for it",
-			AttackSound: "You've asked for it",
+			AttackSound: "",
 			DefeatSound: "AAAARRRH!!!!!!",
 		},
 		{
@@ -31,7 +31,7 @@ func TestLoadHeros(t *testing.T) {
 				Description: "Summon a 1/1 Silver Hand Recruit.",
 			},
 			SummonSound: "For Honor",
-			AttackSound: "Justice aaa...",
+			AttackSound: "",
 			DefeatSound: "Justice aaa...",
 		},
 	}

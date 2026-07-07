@@ -55,10 +55,10 @@ type Hero struct {
 	DeckId          int
 	Class           string    `json:"class"`
 	Name            string    `json:"name"`
-	HeroPower       HeroPower `json:"hero_power"`
-	SummonSound     string    `json:"summon_sound"`
+	HeroPower       HeroPower `json:"hero-power"`
+	SummonSound     string    `json:"battle-cry"`
 	AttackSound     string    `json:"attack_sound"`
-	DefeatSound     string    `json:"defeat_sound"`
+	DefeatSound     string    `json:"defeat"`
 	Health          int
 	MaxHealth       int
 	ManaCrystals    int
